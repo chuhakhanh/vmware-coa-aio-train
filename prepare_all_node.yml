@@ -1,0 +1,23 @@
+---
+- hosts: all
+  vars_files: env.yml
+  gather_facts: no
+  become: true
+  serial: 4
+  tasks: 
+    - name: Copy host file to etc host
+      copy:
+        src: hosts
+        dest: /etc/hosts
+    
+    - name: config /etc/resolv.conf
+      lineinfile:
+        path: /etc/resolv.conf
+        line: nameserver 8.8.8.8
+     
+    - name: Make sure we have yum-utils
+      yum: name=yum-utils state=latest
+
+    - name: Make sure we have yum-plugin-priorities
+      yum: name=yum-plugin-priorities state=latest    
+    

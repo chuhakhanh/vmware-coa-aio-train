@@ -1,0 +1,49 @@
+---
+- hosts: repo
+  vars_files: env.yml
+  gather_facts: no
+  become: true
+  serial: 4
+  tasks: 
+    
+    - name: confirm apache createrepo rsync installed
+      yum: name={{item}} state=installed
+      with_items:
+         - nginx
+         - createrepo
+         - rsync
+    
+    - name: create dirs for centos7 and EPEL repo
+      file: path="/var/www/html/repos/{{item}}" owner=apache group=apache state=directory
+      with_items:
+         - base
+         - centosplus
+         - extras
+         - updates   
+
+    - name: synchronize CentOS YUM repositories to the local directories
+      command: reposync -g -l -d -m --repoid={{item}} --newest-only --download-metadata --download_path=/var/www/html/repos/
+      with_items:
+         - base
+         - centosplus
+         - extras
+         - updates   
+    
+    - name: create a new repodata for the local repositories
+      command: createrepo -g comps.xml /var/www/html/repos/{{item}}
+      with_items:
+         - base
+         - centosplus
+         - extras
+         - updates   
+
+    - name: create dirs for centos7 and EPEL repo
+      file: path=/var/www/html/images/ owner=apache group=apache state=directory
+    
+    - name: copy cirros images into repo
+      copy:
+        src: images/cirros-0.4.0-x86_64-disk.img
+        dest: /var/www/html/images/cirros-0.4.0-x86_64-disk.img
+      with_items:
+         - cirros.img
+         - centos.qcow2
