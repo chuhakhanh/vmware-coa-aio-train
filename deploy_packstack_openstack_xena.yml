@@ -1,9 +1,4 @@
 ---
-- hosts: packstack
-  vars:
-  remote_user: root
-  tasks:
-
 # prepare openstack 
   - name: Make sure we have openstack-packstack
     yum: 

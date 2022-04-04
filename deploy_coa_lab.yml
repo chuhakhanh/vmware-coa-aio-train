@@ -8,11 +8,34 @@
   - name: Deploy the COA cluster on VMware environment
     include: deploy_vmware_coa_cluster.yml
 
-
-    #- include: prepare_all_node.yml
-
-    #- include: prepare_storage_lvm.yml
-    #- include: deploy_packstack_openstack_xena.yml
+- hosts: lab
+  vars_files: vars/vmw_env.yml
+  vars:
+    raw_disks: /dev/sdb
+    vg_name: data
+    lv_name: repos
+    require_lv_size: +100%FREE
+    fs: xfs
+    mount_point: /data
+  gather_facts: no
+  become: true
+  serial: 4
+  tasks: 
+  - name: Prepare requirements on all node
+    include: prepare_all_node.yml
+  - name: Preapre the storage on all node  
+    include: prepare_storage_lvm.yml
+  - name: Deploy the Openstack Xena by packstack on all host 
+    include: deploy_packstack_openstack_xena.yml
     
   
-  
+- hosts: lab
+  connection: local
+  become: true
+  vars_files: vars/os_env.yml
+  vars:
+    # ansible_python_interpreter: /venv-2/bin/python
+
+  tasks:  
+    - name: Create a project for demo
+      include: deploy_demo_project.yml

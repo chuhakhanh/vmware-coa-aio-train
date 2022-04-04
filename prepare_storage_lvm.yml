@@ -1,15 +1,5 @@
 ---
-- hosts: lab
-  become: true
-  vars:
-    raw_disks: /dev/sdb
-    vg_name: data
-    lv_name: repos
-    require_lv_size: +100%FREE
-    fs: xfs
-    mount_point: /data
 
-  tasks:
   
     - name: Create the "{{ vg_name }}" Volume group.
       lvg:

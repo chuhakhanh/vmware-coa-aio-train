@@ -1,27 +1,20 @@
 ---
-- hosts: all
-  vars_files: vars/vmw_env.yml
-  gather_facts: no
-  become: true
-  serial: 4
-  tasks: 
-    - name: Copy host file to etc host
-      copy:
-        src: config/hosts
-        dest: /etc/hosts
-  
-    - name: Copy host file to etc host
-      copy:
-        src: config/2022_03.repo
-        dest: /etc/yum.repos.d/
-      
-    - name: Make sure we have yum-utils
-      yum: name=yum-utils state=latest
-      ignore_errors: yes
+- name: Copy host file to etc host
+  copy:
+    src: config/hosts
+    dest: /etc/hosts
 
-    - name: Make sure we have yum-plugin-priorities
-      yum: name=yum-plugin-priorities state=latest    
-      ignore_errors: yes
-      
-    - name: upgrade all packages
-      yum: name=* state=latest
+- name: Copy host file to etc host
+  copy:
+    src: config/2022_03.repo
+    dest: /etc/yum.repos.d/
+  
+- name: Make sure we have yum-utils
+  yum: name=yum-utils state=latest
+  ignore_errors: yes
+- name: Make sure we have yum-plugin-priorities
+  yum: name=yum-plugin-priorities state=latest    
+  ignore_errors: yes
+  
+- name: upgrade all packages
+  yum: name=* state=latest
