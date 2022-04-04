@@ -1,5 +1,5 @@
 os_auth:
-  auth_url: http://{{ ansible_facts.ansible_default_ipv4.address }}:5000/v3
+  auth_url: "http://{{ ansible_facts.ansible_default_ipv4.address }}:5000/v3"
   username: admin
   password: myrootpassword
   project_name: admin
