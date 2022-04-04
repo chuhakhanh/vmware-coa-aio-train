@@ -33,9 +33,8 @@
   register: deploy
 
 - name: Execute Packstack
-  command: grep -v "\[" inventory | while read line || [[ -n $line ]]; 
+  command: grep -v "\[" "config/inventory" | while read line || [[ -n $line ]]; 
     do 
     sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$line; 
     done
-
 
