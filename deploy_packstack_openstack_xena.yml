@@ -9,6 +9,7 @@
         --default-password=myrootpassword \
         --os-controller-host={{ ansible_facts.default_ipv4.address }} \
         --os-cinder-install=y \
+        --cinder-volumes-size=5G \
         --os-ceilometer-install=n \
         --os-trove-install=n \
         --os-ironic-install=n \
@@ -21,6 +22,6 @@
         --os-neutron-ml2-vlan-ranges=physnet1:298:299 \
         --os-neutron-ovs-bridge-mappings=physnet1:br-ex \
         --os-neutron-l2-agent=openvswitch \
-        --os-neutron-ovs-bridge-interfaces=br-ex:enp0s3 \
-        --provision-demo=n 
+        --os-neutron-ovs-bridge-interfaces=br-ex:ens224 \
+        --provision-demo=n > packstack-allinone.log
 

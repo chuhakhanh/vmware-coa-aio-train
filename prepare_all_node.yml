@@ -4,7 +4,7 @@
     src: config/hosts
     dest: /etc/hosts
 
-- name: Copy repos file to etc host
+- name: Copy repo file to etc host
   copy:
     src: config/2022_03.repo
     dest: /etc/yum.repos.d/
