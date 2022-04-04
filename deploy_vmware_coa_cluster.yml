@@ -31,9 +31,11 @@
   loop: "{{ vms }}" 
   delegate_to: localhost
   register: deploy
-  
+
 - name: Execute Packstack
-  command: cat inventory | while read line || [[ -n $line ]]; 
+  command: grep -v "\[" inventory | while read line || [[ -n $line ]]; 
     do 
-    sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@'$line'; 
+    sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$line; 
     done
+
+
