@@ -25,8 +25,6 @@
   connection: local
   become: true
   vars_files: vars/os_env.yml
-  vars:
-    # ansible_python_interpreter: /venv-2/bin/python
   tasks:  
     - name: Create a project for demo
       include: deploy_demo_project.yml
