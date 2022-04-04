@@ -9,4 +9,4 @@ docker run -d --name deploy-1 repo-1:4000/openstack.kolla/centos-source-deploy:x
 docker exec deploy-1 git clone https://github.com/chuhakhanh/vmware-coa-aio-train 
 docker exec -it deploy-1 /bin/bash; cd vmware-coa-aio-train/; cp -u config/hosts /etc/hosts 
 ansible-playbook -i config/inventory deploy_coa_lab.yml
-ansible-playbook -i config/inventory deploy_coa_lab.yml --start-at-task="Create security group rules"
+ansible-playbook -i config/inventory deploy_coa_lab.yml --start-at-task="Deploy the Openstack Xena by packstack on all host"
