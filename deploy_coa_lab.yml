@@ -21,7 +21,6 @@
       include: deploy_packstack_openstack_xena.yml
     
 - hosts: lab
-  connection: local
   become: true
   vars_files: vars/os_env.yml
   vars:
