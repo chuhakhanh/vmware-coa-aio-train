@@ -10,3 +10,4 @@ docker exec deploy-1 git clone https://github.com/chuhakhanh/vmware-coa-aio-trai
 docker exec -it deploy-1 /bin/bash; cd vmware-coa-aio-train/; cp -u config/hosts /etc/hosts 
 ansible-playbook -i config/inventory deploy_coa_lab.yml
 ansible-playbook -i config/inventory deploy_coa_lab.yml --start-at-task="Deploy the Openstack Xena by packstack on all host"
+ansible-playbook -i config/inventory deploy_coa_lab.yml --start-at-task="Create project flavor"
