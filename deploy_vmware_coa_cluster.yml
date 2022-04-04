@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-  vars_files: config/env.yml
+  vars_files: vars/vmw_env.yml
   gather_facts: no
   become: true
   serial: 4
@@ -16,7 +16,7 @@
         folder: /khanhchu
         name: "{{ item.name }}"
         state: poweredon
-        template: centos-7-coa
+        template: centos-stream-8-kolla-2
         esxi_hostname: "{{ item.esxi_hostname }}"
         disk: "{{ item.disk }}"
         hardware:
@@ -37,4 +37,9 @@
       loop: "{{ vms }}" 
       delegate_to: localhost
       register: deploy
-      
+
+    - name: Execute Packstack
+      command: cat inventory | while read line || [[ -n $line ]]; 
+        do 
+        sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@'$line'; 
+        done

@@ -1,87 +1,92 @@
-# 
 ---
-- hosts: packstack
+- hosts: lab
+  connection: local
   become: true
+  vars_files: vars/os_env.yml
   vars:
-    my_auth:
-      auth_url: https://{{ gather_facts.hostname }}
-      username: admin
-      password: admin
-      project_name: admin
+    ansible_python_interpreter: /venv-2/bin/python
+
   tasks:
-
-    - name: "Create 'tiny' flavor with 1024MB of RAM, 1 virtual CPU, and 10GB of local disk, and 10GB of ephemeral."
+    - name: "Create project flavor"
       openstack.cloud.compute_flavor:
-        cloud: mycloud
+        auth: "{{ os_auth_control_2 }}"
         state: present
-        name: tiny
-        ram: 1024
-        vcpus: 1
-        disk: 10
-        ephemeral: 10
+        name: "{{ item.name }}"
+        ram: "{{ item.ram }}"
+        vcpus: "{{ item.vcpus }}"
+        disk: "{{ item.disk }}"
+        ephemeral: "{{ item.ephemeral }}"
+      loop: "{{ demo_flavors }}" 
         
-    - name: create provider network
+    - name: "Create project networks"
       openstack.cloud.network:
-        auth: "{{my_auth}}"
+        auth: "{{ os_auth_control_2 }}"
         state: present
-        provider_network_type: vlan
-        provider_segmentation_id: 111
-        provider_physical_network: physnet1
-        external: True
-        shared: True
-        name: provider
+        provider_network_type: "{{ item.provider_network_type }}"
+        provider_segmentation_id: "{{ item.provider_segmentation_id }}"
+        provider_physical_network: "{{ item.provider_physical_network }}"
+        external: "{{ item.external }}"
+        shared: "{{ item.shared }}"
+        name: "{{ item.name }}"
+      loop: "{{ demo_networks }}" 
 
-    - name: Gather information about previously created networks
-      openstack.cloud.networks_info:
-        auth: my_auth
-      register: result
-    
-    - name: Show openstack networks
-      debug:
-        msg: "{{ result.openstack_networks }}"
-    
-    - name: Gather information about a previously created network by name
-      openstack.cloud.networks_info:
-        auth:
-          auth_url: https://identity.example.com
-          username: user
-          password: password
-          project_name: someproject
-        name:  provider
-      register: provider_output
-    
-    - name: Create image cirros
-      openstack.cloud.image:
-        auth: "{{ my_auth }}"
-        name: cirros
-        container_format: bare
-        disk_format: qcow2
+    - name: "Create project subnet"
+      openstack.cloud.subnet:
+        name: "{{ item.name }}"
+        auth: "{{ os_auth_control_2 }}"
         state: present
-        filename: http://repo-1/images/cirros-0.3.0-x86_64-disk.img
-        kernel: cirros-vmlinuz
-        ramdisk: cirros-initrd
-        tags:
-          - custom
+        network_name: "{{ item.network_name }}"
+        cidr: "{{ item.cidr }}"
+        dns_nameservers: "{{ item.dns_nameservers }}"
+        ip_version: "{{ item.ip_version }}"
+        gateway_ip: "{{ item.gateway_ip }}"
+        allocation_pool_start: "{{ item.allocation_pool_start }}"
+        allocation_pool_end: "{{ item.allocation_pool_end }}"
+      loop: "{{ demo_subnets }}" 
+
+    - name: "Create project images"
+      openstack.cloud.image:
+        auth: "{{ os_auth_control_2 }}"
+        name: "{{ item.name }}"
+        state: present
+        container_format: "{{ item.container_format }}"
+        disk_format: "{{ item.disk_format }}"
+        filename: "{{ item.filename }}"
+        kernel: "{{ item.kernel }}"
+        ramdisk: "{{ item.ramdisk }}"
+        tags: "{{ item.tags }}"
         properties:
-          cpu_arch: x86_64
-          distro: x64
-    
-    - name: launch a compute instance
-      hosts: localhost
-      tasks:
-        - name: launch an instance
-          openstack.cloud.server:
-            state: present
-            auth: "{{ vms_auth }}"
-            name: vm1
-            region_name: region-b.geo-1
-            availability_zone: az2
-            image: cirros
-            network: provider
-            key_name: test
-            timeout: 200
-            flavor: 101
-            security_groups: 
-              - default
-              - allow_ssh_ping
-            auto_ip: yes
+          cpu_arch: "{{ item.properties.cpu_arch }}"
+          distro: "{{ item.properties.distro }}"
+      loop: "{{ demo_images }}" 
+      
+    - name: "Create security groups"
+      openstack.cloud.security_group:
+        auth: "{{ os_auth_control_2 }}"
+        state: present
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+      loop: "{{ demo_security_groups }}" 
+
+    - name: "Create security group rules"
+      openstack.cloud.security_group_rule:
+        auth: "{{ os_auth_control_2 }}"
+        state: present
+        security_group: "{{ item.security_group }}"
+        protocol: "{{ item.protocol }}"
+        port_range_min: "{{ item.port_range_min }}"
+        port_range_max: "{{ item.port_range_max }}"
+        remote_ip_prefix: "{{ item.remote_ip_prefix }}" 
+        direction: "{{ item.direction }}" 
+      loop: "{{ demo_security_group_rules }}" 
+
+    - name:  Creates a new instance and attaches to a specific network
+      openstack.cloud.server:
+        auth: "{{ os_auth_control_2 }}"
+        name: "{{ item.name }}" 
+        state: present
+        image: "{{ item.image }}" 
+        flavor: "{{ item.flavor }}" 
+        network: "{{ item.network }}" 
+        security_groups: "{{ item.security_groups }}" 
+      loop: "{{ demo_instances  }}" 

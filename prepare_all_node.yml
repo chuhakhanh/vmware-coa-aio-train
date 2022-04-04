@@ -1,23 +1,27 @@
 ---
 - hosts: all
-  vars_files: env.yml
+  vars_files: vars/vmw_env.yml
   gather_facts: no
   become: true
   serial: 4
   tasks: 
     - name: Copy host file to etc host
       copy:
-        src: hosts
+        src: config/hosts
         dest: /etc/hosts
-    
-    - name: config /etc/resolv.conf
-      lineinfile:
-        path: /etc/resolv.conf
-        line: nameserver 8.8.8.8
-     
+  
+    - name: Copy host file to etc host
+      copy:
+        src: config/2022_03.repo
+        dest: /etc/yum.repos.d/
+      
     - name: Make sure we have yum-utils
       yum: name=yum-utils state=latest
+      ignore_errors: yes
 
     - name: Make sure we have yum-plugin-priorities
       yum: name=yum-plugin-priorities state=latest    
-    
+      ignore_errors: yes
+      
+    - name: upgrade all packages
+      yum: name=* state=latest

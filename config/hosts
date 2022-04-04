@@ -39,6 +39,7 @@
 10.1.17.30 ultility # dns, ntp
 10.1.17.31 truenas
 10.1.17.32 pfsense
+10.1.17.33 repo-1
 10.1.17.40 contol2
 10.1.17.41 vc1.svt.hn
 
@@ -84,6 +85,15 @@
 192.168.126.65 c2-compute-2.priv
 192.168.126.66 c2-compute-3.priv
 
+# lab COA packstack
+
+10.1.17.67 lab-1
+10.1.17.68 lab-2
+10.1.17.69 lab-3
+
+192.168.126.67 lab-1.priv 
+192.168.126.68 lab-2.priv 
+192.168.126.69 lab-3.priv 
 # cluster c3 - ceph
 
 10.1.17.70 

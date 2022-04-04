@@ -1,17 +1,50 @@
 ---
-- hosts: storage-1
+- hosts: lab
   become: true
+  vars:
+    raw_disks: /dev/sdb
+    vg_name: data
+    lv_name: repos
+    require_lv_size: +100%FREE
+    fs: xfs
+    mount_point: /data
+
   tasks:
   
-  - name: New 10GB partition in /dev/vdb
-    parted:
-      device: /dev/vdb
-      number: 1
-      state: present
-      part_end: 10GB
+    - name: Create the "{{ vg_name }}" Volume group.
+      lvg:
+        pvs: "/dev/{{ raw_disks }}"
+        vg: "{{ vg_name }}"
+        pesize: "8"
+        pv_options: '-Z y'
+        force: no
+        state: present
 
-  - name: Create a volume group on top of /dev/vdb1 with physical extent size = 32MB
-    community.general.lvg:
-      vg: cinder-volumes
-      pvs: /dev/vdb1
-      pesize: 32
+    - name: Create the "{{ lv_name }}" Logical Volume.
+      lvol:
+        vg: "{{ vg_name }}"
+        lv: "{{ lv_name }}"
+        size: "{{ require_lv_size }}"
+        active: yes
+        force: no
+        state: present
+    
+    - name: Create a "{{ fs }}" filesystem on lvm "/dev/mapper/{{ vg_name}}-{{ lv_name}}".
+      filesystem:
+        fstype: "{{ fs }}"
+        dev: "/dev/mapper/{{ vg_name }}-{{ lv_name }}"
+        force: no
+
+    - name: Create a directory to mount the filesystem.
+      file:
+        path: "{{ mount_point }}"
+        state: directory
+        mode: '0755'
+
+    - name: Mount the created "{{ fs }}" filesystem.
+      mount:
+        path: "{{ mount_point }}"
+        src: "/dev/mapper/{{ vg_name}}-{{ lv_name}}"
+        fstype: "{{ fs }}"
+        opts: rw,nosuid,noexec
+        state: mounted
