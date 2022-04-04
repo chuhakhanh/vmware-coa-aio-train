@@ -5,7 +5,8 @@
   serial: 4
   tasks: 
     
-    - include: deploy_vmware_coa_cluster.yml
+  - name: Deploy the COA cluster on VMware environment
+    import_playbook: deploy_vmware_coa_cluster.yml
     #- include: prepare_all_node.yml
     #- include: prepare_storage_lvm.yml
     #- include: deploy_packstack_openstack_xena.yml
