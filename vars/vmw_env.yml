@@ -5,15 +5,15 @@ vcenter_datacenter: Datacenter
 vms:
 
   - name: lab-1
-    esxi_hostname: 10.1.17.67
+    esxi_hostname: 10.1.17.12
     resource_pool: c1-kolla-ops-centos8
     disk:
     - size_gb: 50
       type: thin
-      datastore: node6-sata1
+      datastore: node2-ssd1
     networks:
       - name: vlan_111
-        ip: 10.1.17.51
+        ip: 10.1.17.67
         netmask: 255.255.0.0
         gateway: 10.1.0.1
         device_type: vmxnet3
@@ -27,15 +27,15 @@ vms:
         device_type: vmxnet3
 
   - name: lab-2
-    esxi_hostname: 10.1.17.68
+    esxi_hostname: 10.1.17.12
     resource_pool: c1-kolla-ops-centos8
     disk:
     - size_gb: 50
       type: thin
-      datastore: node6-sata1
+      datastore: node2-ssd1
     networks:
       - name: vlan_111
-        ip: 10.1.17.52
+        ip: 10.1.17.68
         netmask: 255.255.0.0
         gateway: 10.1.0.1
         device_type: vmxnet3
@@ -49,12 +49,12 @@ vms:
         device_type: vmxnet3
 
   - name: lab-3
-    esxi_hostname: 10.1.17.16
+    esxi_hostname: 10.1.17.12
     resource_pool: c1-kolla-ops-centos8
     disk:
     - size_gb: 50
       type: thin
-      datastore: node6-sata1
+      datastore: node2-ssd1
     networks:
       - name: vlan_111
         ip: 10.1.17.69
