@@ -33,8 +33,5 @@
   register: deploy
 
 - name: Execute Packstack
-  command: grep -v "\[" "config/inventory" | while read line || [[ -n $line ]]; 
-    do 
-    sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$line; 
-    done
+  command: for i in lab-1 lab-2 lab-3 ; do sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$i ; done
 
