@@ -1,5 +1,4 @@
-# storage 
-
+# storage lvm vars
 raw_disks: /dev/sdb
 vg_name: data
 lv_name: repos
@@ -7,7 +6,7 @@ require_lv_size: +100%FREE
 fs: xfs
 mount_point: /data
 
-# vmware 
+# vmware vars
 vcenter_hostname: 10.1.17.41
 vcenter_username: administrator@vsphere.local
 vcenter_password: Admin@123
