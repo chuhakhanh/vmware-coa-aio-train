@@ -1,4 +1,8 @@
 ---
+- name: Set hostname 
+  hostname: 
+    name: "{{ hostname }}"
+
 - name: Copy host file to etc host
   copy:
     src: config/hosts
@@ -35,3 +39,4 @@
   yum: 
     name: all 
     state: latest
+  ignore_errors: yes

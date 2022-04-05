@@ -1,5 +1,6 @@
+hostname: lab-2
 os_auth:
-  auth_url: http://lab-1:5000/v3
+  auth_url: http://lab-2:5000/v3
   username: admin
   password: myrootpassword
   project_name: admin

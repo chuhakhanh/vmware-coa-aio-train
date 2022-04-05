@@ -1,3 +1,4 @@
+hostname: lab-1
 os_auth:
   auth_url: http://lab-1:5000/v3
   username: admin
