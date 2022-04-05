@@ -21,6 +21,7 @@
     shared: "{{ item.shared }}"
     name: "{{ item.name }}"
   loop: "{{ demo_networks }}" 
+
 - name: "Create project subnet"
   openstack.cloud.subnet:
     name: "{{ item.name }}"
@@ -34,6 +35,7 @@
     allocation_pool_start: "{{ item.allocation_pool_start }}"
     allocation_pool_end: "{{ item.allocation_pool_end }}"
   loop: "{{ demo_subnets }}" 
+
 - name: "Create project images"
   openstack.cloud.image:
     auth: "{{ os_auth }}"
@@ -57,6 +59,7 @@
     name: "{{ item.name }}"
     description: "{{ item.description }}"
   loop: "{{ demo_security_groups }}" 
+
 - name: "Create security group rules"
   openstack.cloud.security_group_rule:
     auth: "{{ os_auth }}"
@@ -68,6 +71,7 @@
     remote_ip_prefix: "{{ item.remote_ip_prefix }}" 
     direction: "{{ item.direction }}" 
   loop: "{{ demo_security_group_rules }}" 
+  
 - name:  Creates a new instance and attaches to a specific network
   openstack.cloud.server:
     auth: "{{ os_auth }}"
