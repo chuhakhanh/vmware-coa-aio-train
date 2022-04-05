@@ -11,7 +11,7 @@
     mode: '0755'
 
 - name: Move all repo files to backup directory
-  command: mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/old
+  shell: mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/old
   ignore_errors: yes
 
 - name: Copy repo file to etc host

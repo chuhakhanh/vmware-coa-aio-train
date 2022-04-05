@@ -35,7 +35,7 @@
 - name: run copy public key
   shell: |
     for i in lab-1 lab-2 lab-3 ; do
-       ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$i
+      sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$i
     done
   args:
     executable: /bin/bash
