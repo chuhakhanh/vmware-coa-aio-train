@@ -1,3 +1,4 @@
+---
 - hosts: localhost
   vars_files: vars/vmw_env.yml
   gather_facts: no
