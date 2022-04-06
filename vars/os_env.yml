@@ -48,8 +48,6 @@ demo_images:
     filename: /root/cirros-0.5.2-x86_64-disk.img
     kernel: cirros-vmlinuz
     ramdisk: cirros-initrd
-    tags:
-      - custom
     properties:
       cpu_arch: x86_64
       distro: x64
