@@ -46,7 +46,6 @@
     filename: "{{ item.filename }}"
     kernel: "{{ item.kernel }}"
     ramdisk: "{{ item.ramdisk }}"
-    tags: "{{ item.tags }}"
     properties:
       cpu_arch: "{{ item.properties.cpu_arch }}"
       distro: "{{ item.properties.distro }}"
@@ -71,7 +70,7 @@
     remote_ip_prefix: "{{ item.remote_ip_prefix }}" 
     direction: "{{ item.direction }}" 
   loop: "{{ demo_security_group_rules }}" 
-  
+
 - name:  Creates a new instance and attaches to a specific network
   openstack.cloud.server:
     auth: "{{ os_auth }}"
