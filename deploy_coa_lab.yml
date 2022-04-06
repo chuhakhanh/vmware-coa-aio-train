@@ -2,6 +2,7 @@
   vars_files: vars/vmw_env.yml
   gather_facts: no
   become: true
+  fork: 6
   serial: 4
   tasks:     
     - name: Deploy the COA cluster on VMware environment
@@ -11,6 +12,7 @@
   vars_files: vars/vmw_env.yml
   gather_facts: true
   become: true
+  fork: 6
   serial: 4
   tasks: 
     - name: Prepare requirements on all node
