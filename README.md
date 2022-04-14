@@ -10,7 +10,10 @@ vars folder:
 config folder: var and files to deploy
 
 ## On deploy node configure docker repo to repo-1 and download deloyment docker
- vi /etc/docker/daemon.json
+### remove podman and install docker-ce
+yum remove buildah skopeo podman containers-common atomic-registries docker container-tools
+yum install docker-ce; systemctl start docker; systemctl enable docker
+vi /etc/docker/daemon.json
 {
   "insecure-registries" : ["repo-1:4000"]
 }
@@ -20,7 +23,10 @@ docker run -d --name deploy-1 repo-1:4000/openstack.kolla/centos-source-deploy:x
 docker exec -it deploy-1 /bin/bash; 
 
 ## On deployment docker download requirements file
-docker exec deploy-1 git clone https://github.com/chuhakhanh/vmware-coa-aio-train 
+
+docker exec -it  deploy-1 /bin/bash
+git clone https://github.com/chuhakhanh/vmware-coa-aio-train@study-4-2022 
+cd vmware-coa-aio-train 
 cp -u config/hosts /etc/hosts 
 ssh-keygen 
 curl http://repo-1/images/cirros-0.5.2-x86_64-disk.img --output /root/cirros-0.5.2-x86_64-disk.img 
