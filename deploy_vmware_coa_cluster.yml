@@ -32,6 +32,8 @@
         netmask: 255.255.0.0
         gateway: 172.11.0.1
         device_type: vmxnet3
+      - name: LABSYSTEM_vnet_05
+        device_type: vmxnet3      
     customization:
       hostname: "{{ item.name }}"
       dns_servers: 8.8.8.8 
