@@ -1,7 +1,12 @@
 ---
 - name: "Create project flavor"
   openstack.cloud.compute_flavor:
-    auth: "{{ os_auth }}"
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     state: present
     name: "{{ item.name }}"
     ram: "{{ item.ram }}"
@@ -12,7 +17,12 @@
     
 - name: "Create project networks"
   openstack.cloud.network:
-    auth: "{{ os_auth }}"
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     state: present
     provider_network_type: "{{ item.provider_network_type }}"
     provider_segmentation_id: "{{ item.provider_segmentation_id }}"
@@ -24,21 +34,31 @@
 
 - name: "Create project subnet"
   openstack.cloud.subnet:
-    name: "{{ item.name }}"
-    auth: "{{ os_auth }}"
+    name: provider-flat-subnet
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     state: present
-    network_name: "{{ item.network_name }}"
-    cidr: "{{ item.cidr }}"
-    dns_nameservers: "{{ item.dns_nameservers }}"
-    ip_version: "{{ item.ip_version }}"
-    gateway_ip: "{{ item.gateway_ip }}"
-    allocation_pool_start: "{{ item.allocation_pool_start }}"
-    allocation_pool_end: "{{ item.allocation_pool_end }}"
-  loop: "{{ demo_subnets }}" 
+    network_name: provider-flat
+    cidr: 172.12.0.0/16
+    dns_nameservers: 8.8.8.8
+    ip_version: 4
+    gateway_ip: 172.12.0.1
+    allocation_pool_start: "{{ item.provider-subnet-start }}"
+    allocation_pool_end: "{{ item.provider-subnet-end }}"
+  loop: "{{ vms }}" 
 
 - name: "Create project images"
   openstack.cloud.image:
-    auth: "{{ os_auth }}"
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     name: "{{ item.name }}"
     state: present
     container_format: "{{ item.container_format }}"
@@ -53,7 +73,12 @@
   
 - name: "Create security groups"
   openstack.cloud.security_group:
-    auth: "{{ os_auth }}"
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     state: present
     name: "{{ item.name }}"
     description: "{{ item.description }}"
@@ -61,7 +86,12 @@
 
 - name: "Create security group rules"
   openstack.cloud.security_group_rule:
-    auth: "{{ os_auth }}"
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     state: present
     security_group: "{{ item.security_group }}"
     protocol: "{{ item.protocol }}"
@@ -73,7 +103,12 @@
 
 - name:  Creates a new instance and attaches to a specific network
   openstack.cloud.server:
-    auth: "{{ os_auth }}"
+    auth:
+        auth_url: "http://{{ ansible_facts.default_ipv4.address }}:5000/v3"
+        username: admin
+        password: C0@lab!2022
+        project_name: admin
+        domain_id: default
     name: "{{ item.name }}" 
     state: present
     image: "{{ item.image }}" 

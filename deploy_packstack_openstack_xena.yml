@@ -6,7 +6,7 @@
 
 - name: Install Openstack by Packstack
   command: packstack --allinone \
-        --default-password=myrootpassword \
+        --default-password=C0@lab!2022 \
         --os-controller-host={{ ansible_facts.default_ipv4.address }} \
         --os-cinder-install=y \
         --cinder-volumes-size=5G \
@@ -18,8 +18,8 @@
         --os-heat-install=n \
         --os-neutron-ml2-mechanism-drivers=openvswitch \
         --os-neutron-ml2-tenant-network-types=vxlan \
-        --os-neutron-ml2-type-drivers=vxlan,flat,vlan \
-        --os-neutron-ml2-vlan-ranges=physnet1:298:299 \
+        --os-neutron-ml2-type-drivers=flat,vlan \
+        --os-neutron-ml2-vlan-ranges=physnet1:2:4000 \
         --os-neutron-ovs-bridge-mappings=physnet1:br-ex \
         --os-neutron-l2-agent=openvswitch \
         --os-neutron-ovs-bridge-interfaces=br-ex:ens224 \

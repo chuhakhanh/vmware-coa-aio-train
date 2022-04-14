@@ -1,18 +1,21 @@
 ---
 - name: Create a virtual machine from a template
   community.vmware.vmware_guest:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ vcenter_datacenter }}"
+    hostname: 10.101.101.99
+    username: coa@vsphere.local
+    password: CO@_class2022IT4VN
+    datacenter: DC-LAB
     validate_certs: no
-    resource_pool: "{{ item.resource_pool }}"
-    folder: /khanhchu
+    resource_pool: COA-LAB-04-2022
+    folder: /COA-LAB-04-2022
     name: "{{ item.name }}"
     state: poweredon
-    template: centos-stream-8-kolla-2
-    esxi_hostname: "{{ item.esxi_hostname }}"
-    disk: "{{ item.disk }}"
+    template: centos-stream-8-coa-1
+    esxi_hostname: 10.101.101.12
+    disk:
+      - size_gb: 50
+        type: thin
+        datastore: SSD-PCI-03
     hardware:
       memory_mb: 16384
       num_cpus: 4
@@ -23,19 +26,17 @@
       hotremove_cpu: True
       hotadd_memory: False
       boot_firmware: "efi"
-    networks: "{{ item.networks }}"
+    networks: 
+      - name: LABSYSTEM_vnet_04
+        ip: "{{ item.ip }}"
+        netmask: 255.255.0.0
+        gateway: 172.11.0.1
+        device_type: vmxnet3
     customization:
+      hostname: "{{ item.name }}"
       dns_servers: 8.8.8.8 
     wait_for_ip_address: true
     wait_for_ip_address_timeout: 600
   loop: "{{ vms }}" 
   delegate_to: localhost
   register: deploy
-
-- name: run copy public key
-  shell: |
-    for i in lab-1 lab-2 lab-3 ; do
-      sshpass -p alo1234 ssh-copy-id -f -i ~/.ssh/id_rsa.pub root@$i
-    done
-  args:
-    executable: /bin/bash

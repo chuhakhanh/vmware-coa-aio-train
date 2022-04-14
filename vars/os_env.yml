@@ -24,22 +24,12 @@ demo_flavors:
     ephemeral: 0
 
 demo_networks:
-  - name: provider-vlan111
-    provider_network_type: vlan
-    provider_segmentation_id: 111
+  - name: provider-flat
+    provider_network_type: flat
     provider_physical_network: physnet1
     external: True
     shared: True
   
-  - name: provider-vlan126
-    provider_network_type: vlan
-    provider_segmentation_id: 126
-    provider_physical_network: physnet1
-    external: True
-    shared: True
-
-
-
 demo_images:
   - name: cirros
     container_format: bare
@@ -75,6 +65,6 @@ demo_instances:
   - name: inst1
     image: cirros
     flavor: x1.tiny
-    network: provider-vlan111 
+    network: provider-flat 
     security_groups: allow_ssh_icmp 
       

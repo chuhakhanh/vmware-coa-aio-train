@@ -1,14 +1,5 @@
 ---
-- hosts: localhost
-  vars_files: vars/vmw_env.yml
-  gather_facts: no
-  become: true
-  serial: 4
-  tasks:     
-    - name: Deploy the COA cluster on VMware environment
-      include: deploy_vmware_coa_cluster.yml
-
-- hosts: lab
+- hosts: share
   vars_files: vars/vmw_env.yml
   gather_facts: true
   become: true
@@ -16,15 +7,16 @@
   tasks: 
     - name: Prepare requirements on all node
       include: prepare_all_node.yml
-  #- name: Preapre the storage on all node  
-  #  include: prepare_storage_lvm.yml
+
     - name: Deploy the Openstack Xena by packstack on all host 
       include: deploy_packstack_openstack_xena.yml
     
-- hosts: lab
+- hosts: share
   connection: local
   become: true
-  vars_files: vars/os_env.yml
+  vars_files: 
+    - vars/os_env.yml
+    - vars/vmw_env.yml
   vars:
     ansible_python_interpreter: /usr/bin/python3.8
   gather_facts: true
