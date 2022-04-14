@@ -25,7 +25,7 @@ docker exec -it deploy-1 /bin/bash;
 ## On deployment docker download requirements file
 
 docker exec -it  deploy-1 /bin/bash
-git clone https://github.com/chuhakhanh/vmware-coa-aio-train@study-4-2022 
+ git clone --branch study-4-2022 https://github.com/chuhakhanh/vmware-coa-aio-train
 cd vmware-coa-aio-train 
 cp -u config/hosts /etc/hosts 
 ssh-keygen 
@@ -34,7 +34,7 @@ curl http://repo-1/images/cirros-0.5.2-x86_64-disk.img --output /root/cirros-0.5
 # Deploy lab
 
 ## Deploy Test
-ansible-playbook -i config/inventory_test deploy_coa_lab_vmw.yml
+ansible-playbook -i config/inventory_test deploy_coa_lab_vmw_test.yml
 ansible-playbook -i config/inventory_test deploy_coa_lab_os.yml
 
 ## add hosts to ansible_host.txt ( this should be generated from invneotry file instead by manually )

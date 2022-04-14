@@ -7,7 +7,7 @@
     datacenter: DC-LAB
     validate_certs: no
     resource_pool: COA-LAB-04-2022
-    folder: /COA-LAB-04-2022
+    folder: /DC-LAB/vm/COA-LAB-04-2022
     name: "{{ item.name }}"
     state: poweredon
     template: centos-stream-8-coa-1
