@@ -27,7 +27,7 @@ IMAGE_TYPE=linux
 # This EXT_NET_CIDR is your public network,that you want to connect to the internet via.
 ENABLE_EXT_NET=${ENABLE_EXT_NET:-1}
 EXT_NET_CIDR=${EXT_NET_CIDR:-'172.12.0.0/16'}
-EXT_NET_RANGE=${EXT_NET_RANGE:-'start=172.12.2.150,end=172.12.2.199'}
+EXT_NET_RANGE=${EXT_NET_RANGE:-'start='$1,'end='$2}
 EXT_NET_GATEWAY=${EXT_NET_GATEWAY:-'172.12.0.1'}
 
 # Sanitize language settings to avoid commands bailing out
@@ -138,20 +138,17 @@ if ! $KOLLA_OPENSTACK_COMMAND flavor list | grep -q m1.tiny; then
     $KOLLA_OPENSTACK_COMMAND flavor create --id 5 --ram 16384 --disk 160 --vcpus 8 m1.xlarge
 fi
 
-cat << EOF
-
-Done.
-
-To deploy a demo instance, run:
-
 openstack server create \
     --image cirros \
     --flavor m1.tiny \
     --key-name mykey \
     --network demo-net \
     demo1
-    
+
 openstack floating ip create public1
+
+cat << EOF
+
 openstack server add floating ip demo1 172.12.2.168 
 
 EOF
