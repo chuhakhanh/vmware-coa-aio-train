@@ -11,15 +11,4 @@
     - name: Deploy the Openstack Xena by packstack on all host 
       include: deploy_packstack_openstack_xena.yml
     
-- hosts: share
-  connection: local
-  become: true
-  vars_files: 
-    - vars/os_env.yml
-    - vars/vmw_env.yml
-  vars:
-    ansible_python_interpreter: /usr/bin/python3.8
-  gather_facts: true
-  tasks:  
-    - name: Create a project for demo
-      include: deploy_demo_project.yml
+

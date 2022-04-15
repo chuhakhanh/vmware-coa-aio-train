@@ -46,7 +46,7 @@ ansible-playbook -i config/inventory_test deploy_coa_lab_os.yml
 ### Deploy all virtual machine
 
 ansible-playbook -i config/inventory deploy_coa_lab_vmw.yml
-./key_copy.sh host_list.txt
+./key_copy.sh config/host_list.txt
 ### Deploy openstack on share 
 ansible-playbook -i config/inventory deploy_coa_lab_os.yml
 ansible-playbook -i config/inventory deploy_coa_lab_os.yml --start-at-task="Create project flavor"

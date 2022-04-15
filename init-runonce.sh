@@ -144,10 +144,14 @@ Done.
 
 To deploy a demo instance, run:
 
-openstack server create \\
-    --image ${IMAGE_NAME} \\
-    --flavor m1.tiny \\
-    --key-name mykey \\
-    --network demo-net \\
+openstack server create \
+    --image cirros \
+    --flavor m1.tiny \
+    --key-name mykey \
+    --network demo-net \
     demo1
+    
+openstack floating ip create public1
+openstack server add floating ip demo1 172.12.2.168 
+
 EOF
