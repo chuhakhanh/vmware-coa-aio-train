@@ -38,7 +38,7 @@ ansible-playbook -i config/inventory_test deploy_coa_lab_vmw_test.yml
 
 ## add hosts to ansible_host.txt ( this should be generated from invneotry file instead by manually )
 
-./key_copy.sh ansible_host.txt
+./key_copy.sh host_list_test.txt
 
 ansible-playbook -i config/inventory_test deploy_coa_lab_os.yml
 
@@ -46,7 +46,7 @@ ansible-playbook -i config/inventory_test deploy_coa_lab_os.yml
 ### Deploy all virtual machine
 
 ansible-playbook -i config/inventory deploy_coa_lab_vmw.yml
-
+./key_copy.sh host_list.txt
 ### Deploy openstack on share 
 ansible-playbook -i config/inventory deploy_coa_lab_os.yml
 ansible-playbook -i config/inventory deploy_coa_lab_os.yml --start-at-task="Create project flavor"
