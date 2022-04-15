@@ -148,9 +148,9 @@ openstack server create \
 openstack floating ip create public1
 
 floatingip=$(openstack floating ip list -c "Floating IP Address" | tail -2 | head -1 | cut -f 2 -d "|" | tr -d "[:blank:]")
-openstack server add floating ip demo1 $floatingip
+openstack server add floating ip demo1 ${floatingip}
+echo "FloatingIP: "${floatingip}
 cat << EOF
 
-openstack server add floating ip demo1 172.12.2.168 
-
+ping to FloatingIP to verify
 EOF
