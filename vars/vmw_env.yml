@@ -430,3 +430,15 @@ vms:
     provider-subnet: 172.12.0.0/16
     provider-subnet-start: 172.12.72.50
     provider-subnet-end: 172.12.72.100
+
+  - name: lab-73
+    ip: 172.11.73.1
+    provider-subnet: 172.12.0.0/16
+    provider-subnet-start: 172.12.73.50
+    provider-subnet-end: 172.12.73.100
+    
+  - name: lab-74
+    ip: 172.11.74.1
+    provider-subnet: 172.12.0.0/16
+    provider-subnet-start: 172.12.74.50
+    provider-subnet-end: 172.12.74.100
