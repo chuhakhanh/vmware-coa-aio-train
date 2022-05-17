@@ -17,7 +17,7 @@ vi /etc/docker/daemon.json
 {
   "insecure-registries" : ["repo-1:4000"]
 }
-
+systemctl restart docker
 docker pull repo-1:4000/openstack.kolla/centos-source-deploy:xena
 docker run -d --name deploy-1 repo-1:4000/openstack.kolla/centos-source-deploy:xena
 docker exec -it deploy-1 /bin/bash; 
@@ -25,15 +25,16 @@ docker exec -it deploy-1 /bin/bash;
 ## On deployment docker download requirements file
 
 docker exec -it deploy-1 /bin/bash
- git clone --branch study-4-2022 https://github.com/chuhakhanh/vmware-coa-aio-train
+git clone --branch study-4-2022 https://github.com/chuhakhanh/vmware-coa-aio-train
 cd vmware-coa-aio-train 
 cp -u config/hosts /etc/hosts 
 ssh-keygen 
 curl http://repo-1/images/cirros-0.5.2-x86_64-disk.img --output /root/cirros-0.5.2-x86_64-disk.img 
-
+wget http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/sshpass-1.09-4.el8.x86_64.rpm
 # Deploy lab
 chmod u+x init-runonce.sh key_copy.sh
 ## Deploy Test
+git pull --branch study-4-2022 https://github.com/chuhakhanh/vmware-coa-aio-train
 ansible-playbook -i config/inventory_test deploy_coa_lab_vmw_test.yml
 ./key_copy.sh host_list_test.txt
 ansible-playbook -i config/inventory_test deploy_coa_lab_os.yml
