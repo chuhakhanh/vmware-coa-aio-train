@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This help for create several openstack AIO in a VMware vsphere.
-repo-1 is a precreated virtual machine includes:
+This guide used to create a number of virtual machine on VMware vsphere. Each VM has a AIO Openstack. 
+VM repo-1 includes:
 - yum repository at Mar 2022
 - regedit docker images of docker images for kolla-ansible xena and a deploy image with required lib(pythone, openstack client, etc..)
 - cirros images
