@@ -1,0 +1,90 @@
+## Test
+lab-1:
+  vms:
+    - name: osp-1
+      esxi_hostname: 10.1.0.21
+      memory_mb: 8192
+      disk:
+      - size_gb: 50
+        type: thin
+        datastore: ssd01
+      networks:
+        - name: vlan_111
+          ip: 10.1.17.81
+          netmask: 255.255.0.0
+          gateway: 10.1.0.1
+          device_type: vmxnet3
+
+  provider-subnet: 172.12.0.0/16
+  provider-subnet-start: 172.12.1.50
+  provider-subnet-end: 172.12.1.100
+
+lab-2:
+  vms:
+    - name: osp-2
+      esxi_hostname: 10.1.0.21
+      memory_mb: 8192
+      disk:
+      - size_gb: 50
+        type: thin
+        datastore: ssd01
+      networks:
+        - name: vlan_111
+          ip: 10.1.17.82
+          netmask: 255.255.0.0
+          gateway: 10.1.0.1
+          device_type: vmxnet3
+
+  provider-subnet: 172.12.0.0/16
+  provider-subnet-start: 172.12.2.50
+  provider-subnet-end: 172.12.2.100
+
+## Production
+lab-3:
+  vms:
+    - name: osp-3
+      esxi_hostname: 10.1.0.21
+      memory_mb: 32768
+      disk:
+      - size_gb: 50
+        type: thin
+        datastore: ssd01
+      networks:
+        - name: vlan_111
+          ip: 172.11.3.1
+          netmask: 255.255.0.0
+          gateway: 10.1.0.1
+          device_type: vmxnet3
+
+  provider-subnet: 172.12.0.0/16
+  provider-subnet-start: 172.12.3.50
+  provider-subnet-end: 172.12.3.100
+
+lab-4:
+  vms:
+    - name: osp-4
+      esxi_hostname: 10.1.0.21
+      memory_mb: 32768
+      disk:
+      - size_gb: 50
+        type: thin
+        datastore: ssd01
+      networks:
+        - name: vlan_111
+          ip: 172.11.1.1
+          netmask: 255.255.0.0
+          gateway: 10.1.0.1
+          device_type: vmxnet3
+
+  provider-subnet: 172.12.0.0/16
+  provider-subnet-start: 172.12.4.50
+  provider-subnet-end: 172.12.4.100
+
+ 
+
+ 
+
+ 
+
+ 
+

@@ -1,0 +1,32 @@
+---
+- hosts: all
+  gather_facts: true
+  tasks:    
+
+    - name: Copy host file to etc host
+      copy:
+        src: "../../config/cluster/{{ lab_name }}/hosts"
+        dest: /etc/hosts
+        
+    - name: Set system hostname
+      shell: |
+        hostnamectl set-hostname `grep {{ inventory_hostname }} /etc/hosts | cut -d ' ' -f 2`
+  
+    - name: Create a backup directory if it does not exist
+      file:
+        path: /etc/yum.repos.d/old
+        state: directory
+        mode: '0755'
+  
+    - name: Move all repo files to backup directory
+      shell: mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/old
+      ignore_errors: yes
+  
+    - name: Copy repo file to etc host
+      copy:
+        src: ../../config/repos/stream8_2022_03.repo
+        dest: /etc/yum.repos.d/
+
+
+
+          
