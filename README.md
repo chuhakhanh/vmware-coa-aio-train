@@ -36,12 +36,34 @@ From repo-1 export images
 
     docker save -o centos-source-deploy.tar 4b4369be8793
 
-From deploy-1 
+From VM deploy-1 
+- configure docker software 
+- run the deploy container 
 
-Run docker container deploy
+From VM deploy-1 remove podman and install docker-ce
+  
+    yum remove buildah skopeo podman containers-common atomic-registries docker container-tools
+    yum install docker-ce; systemctl start docker; systemctl enable docker
+    vi /etc/docker/daemon.json
+    {
+      "insecure-registries" : ["repo-1:4000"]
+    }
+    systemctl restart docker
+
+From deploy-1 run docker container deploy
+
+By pull image 
+
+    docker pull repo-1:4000/openstack.kolla/centos-source-deploy:xena
+    docker run -d --name deploy-1 repo-1:4000/openstack.kolla/centos-source-deploy:xena
+    
+Or use a direct image 
 
     podman load -i centos-source-deploy.tar
     podman run -d --name deploy-1 4b4369be8793
+    
+Install require into container
+
     podman exec -it deploy-1 /bin/bash; 
     vi ~/.bashrc 
     alias ll='ls -lG'
@@ -49,14 +71,18 @@ Run docker container deploy
     yum install sshpass
     yum install tmux
 
+Download requirements file
+
+    docker exec -it deploy-1 /bin/bash
+    git clone --branch study-3-2023 https://github.com/chuhakhanh/vmware-coa-aio-train
+    cd vmware-coa-aio-train 
+    cp -u config/hosts /etc/hosts 
+    ssh-keygen 
+    curl http://repo-1/images/cirros-0.5.2-x86_64-disk.img --output /root/cirros-0.5.2-x86_64-disk.img 
+    wget http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/sshpass-1.09-4.el8.x86_64.rpm
+
+
 ### Create a virtual machine cluster
-
-    cp -f config/cluster/lab1/hosts /etc/hosts
-
-    docker exec -it deploy-1 -u0 /bin/bash;
-    git clone https://github.com/chuhakhanh/ansible-vmware-kolla-centos8
-    cd /root/ansible-vmware-kolla-centos8
-    git checkout poc-cgnat
 
     for i in lab-1 
     do
@@ -95,13 +121,6 @@ Configure storage node, in this case we use NFS
         ansible-playbook -i config/cluster/$i/inventory playbooks/cluster_app_provisioning/prepare_node_storage.yml -e "lab_name=$i"
     done
 
-## Prepare kolla-ansible environment
-
-Prepare kolla-ansible
-
-    ansible-galaxy collection install community.vmware
-    pip3 install "kolla-ansible==13.7.0"
-    pip3 install git+https://opendev.org/openstack/kolla-ansible@stable/xena
 
 Prepare images ([Following steps in other gudie setup local repo ](https://github.com/chuhakhanh/local-repo-centos-stream8/Readme.md))
 
@@ -114,50 +133,13 @@ Snapshot virtual machine cluster before run install
 
 ### Deploy Openstack
 
-There may be a bug that I cannot use a specific config_dir as below command become failed
-    kolla-ansible -i ./config/kolla/multinode --configdir ./config/kolla/config deploy
-So that use node_config as default : /etc/kolla (https://github.com/openstack/kolla-ansible/blob/master/ansible/group_vars/all.yml) to deploy
-
-    cp -r ./config/kolla/ /etc/
-
-    kolla-ansible -i /etc/kolla/multinode prechecks
-    kolla-ansible -i /etc/kolla/multinode pull
-    kolla-ansible -i /etc/kolla/multinode deploy
-    kolla-ansible -i /etc/kolla/multinode post-deploy
-    kolla-ansible -i /etc/kolla/multinode reconfigure
-
     cp -r ./scripts/ /etc/kolla; chmod u+x /etc/kolla/scripts/init-runonce.sh; /etc/kolla/scripts/init-runonce.sh vlan
  
 Initilization the Openstack Cluster node
     docker restart $(docker ps -a -q)
 
 
-### Preprare deploy-1 
 
-On deploy node configure docker repo to repo-1 and download deloyment docker
-
-remove podman and install docker-ce
-  
-    yum remove buildah skopeo podman containers-common atomic-registries docker container-tools
-    yum install docker-ce; systemctl start docker; systemctl enable docker
-    vi /etc/docker/daemon.json
-    {
-      "insecure-registries" : ["repo-1:4000"]
-    }
-    systemctl restart docker
-    docker pull repo-1:4000/openstack.kolla/centos-source-deploy:xena
-    docker run -d --name deploy-1 repo-1:4000/openstack.kolla/centos-source-deploy:xena
-    docker exec -it deploy-1 /bin/bash; 
-
-On deployment docker download requirements file
-
-    docker exec -it deploy-1 /bin/bash
-    git clone --branch study-4-2022 https://github.com/chuhakhanh/vmware-coa-aio-train
-    cd vmware-coa-aio-train 
-    cp -u config/hosts /etc/hosts 
-    ssh-keygen 
-    curl http://repo-1/images/cirros-0.5.2-x86_64-disk.img --output /root/cirros-0.5.2-x86_64-disk.img 
-    wget http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/sshpass-1.09-4.el8.x86_64.rpm
 
 ### Deploy lab
 
