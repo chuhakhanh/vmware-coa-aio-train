@@ -1,0 +1,30 @@
+# VMware vsphere virtual machines(vms) vars
+vms:
+  - name: lab-1
+    esxi_hostname: 10.1.0.21
+    memory_mb: 8192
+    disk:
+    - size_gb: 50
+      type: thin
+      datastore: ssd01
+    networks:
+      - name: vlan_111
+        ip: 172.11.1.1
+        netmask: 255.255.0.0
+        gateway: 10.1.0.1
+        device_type: vmxnet3
+
+      - name: vlan_all
+        device_type: vmxnet3
+
+      - name: vlan_126
+        ip: 192.168.126.51
+        netmask: 255.255.255.0
+        device_type: vmxnet3
+
+provider-subnet: 172.12.0.0/16
+provider-subnet-start: 172.12.1.50
+provider-subnet-end: 172.12.1.100
+
+ 
+
